@@ -1,76 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Translation App</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    label {
-      display: block;
-      margin-bottom: 5px;
-    }
-    select, input, button {
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 10px;
-      box-sizing: border-box;
-    }
-    button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            text-align: center;
+        }
+        select, input, button {
+            margin: 5px;
+            padding: 8px;
+            font-size: 16px;
+        }
+        button {
+            cursor: pointer;
+        }
+        #output {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Translation App</h2>
-    <label for="source-lang">Source Language:</label>
-    <select id="source-lang">
-      <option value="en">English</option>
-      <option value="fr">French</option>
-      <!-- Add more options as needed -->
-    </select>
-    <label for="target-lang">Target Language:</label>
-    <select id="target-lang">
-      <option value="zh">Chinese</option>
-      <option value="es">Spanish</option>
-      <!-- Add more options as needed -->
-    </select>
-    <label for="text">Text to Translate:</label>
-    <input type="text" id="text" placeholder="Enter text to translate">
-    <button onclick="translate()">Translate</button>
-    <div id="translation-result"></div>
-  </div>
+    <div class="container">
+        <h2>Translation Interface</h2>
+        <select id="sourceLang">
+            <option value="en">English</option>
+            <option value="zh">Chinese</option>
+            <!-- Add more language options here -->
+        </select>
+        <select id="targetLang">
+            <option value="en">English</option>
+            <option value="zh">Chinese</option>
+            <!-- Add more language options here -->
+        </select>
+        <br>
+        <input type="text" id="textInput" placeholder="Enter text to translate">
+        <button onclick="translate()">Translate</button>
+        <div id="output"></div>
+    </div>
 
-  <script>
-    async function translate() {
-      const sourceLang = document.getElementById('source-lang').value;
-      const targetLang = document.getElementById('target-lang').value;
-      const text = document.getElementById('text').value;
+    <script>
+        async function translate() {
+            const sourceLang = document.getElementById('sourceLang').value;
+            const targetLang = document.getElementById('targetLang').value;
+            const text = document.getElementById('textInput').value;
 
-      const url = `https://translate.xzyl4303.workers.dev/?text=${encodeURIComponent(text)}&source_lang=${sourceLang}&target_lang=${targetLang}`;
-      
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        document.getElementById('translation-result').innerText = data.response.translated_text;
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    }
-  </script>
+            try {
+                const response = await fetch(`https://translate.xzyl4303.workers.dev/?text=${encodeURIComponent(text)}&source_lang=${sourceLang}&target_lang=${targetLang}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('output').innerText = data.response.translations[0].translatedText;
+                } else {
+                    document.getElementById('output').innerText = 'Translation failed.';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
 </body>
 </html>
