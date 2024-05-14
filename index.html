@@ -29,26 +29,31 @@
   <div id="translationResult"></div>
 
   <script>
-    async function translate() {
-      const sourceLang = document.getElementById('sourceLang').value;
-      const targetLang = document.getElementById('targetLang').value;
-      const text = document.getElementById('textInput').value;
-      
-      const url = `https://translate.xzyl4303.workers.dev/?source_lang=${sourceLang}&target_lang=${targetLang}&text=${encodeURIComponent(text)}`;
-      
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        if (response.ok) {
-          document.getElementById('translationResult').innerText = `翻译结果：${data.response.translated_text}`;
-        } else {
-          document.getElementById('translationResult').innerText = `翻译失败：${data.response.error}`;
-        }
-      } catch (error) {
-        console.error('发生错误：', error);
-      }
+ document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("translateButton").addEventListener("click", translate);
+});
+
+async function translate() {
+  const sourceLang = document.getElementById('sourceLang').value;
+  const targetLang = document.getElementById('targetLang').value;
+  const text = document.getElementById('textInput').value;
+  
+  const url = `https://translate.xzyl4303.workers.dev/?source_lang=${sourceLang}&target_lang=${targetLang}&text=${encodeURIComponent(text)}`;
+  
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    if (response.ok) {
+      document.getElementById('translationResult').innerText = `翻译结果：${data.response.translated_text}`;
+    } else {
+      document.getElementById('translationResult').innerText = `翻译失败：${data.response.error}`;
     }
+  } catch (error) {
+    console.error('发生错误：', error);
+  }
+}
+
   </script>
 </body>
 </html>
