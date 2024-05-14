@@ -47,12 +47,13 @@
         </select>
         <br>
         <input type="text" id="textInput" placeholder="Enter text to translate">
-        <button onclick="translate()">Translate</button>
+        <!-- 在这里修改了 onclick 事件 -->
+        <button onclick="translateText()">Translate</button>
         <div id="output"></div>
     </div>
 
     <script>
-        async function translate() {
+        async function translateText() {
             const sourceLang = document.getElementById('sourceLang').value;
             const targetLang = document.getElementById('targetLang').value;
             const text = document.getElementById('textInput').value;
