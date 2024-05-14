@@ -1,76 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Translation Interface</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
-        }
-        .container {
-            text-align: center;
-        }
-        select, input, button {
-            margin: 5px;
-            padding: 8px;
-            font-size: 16px;
-        }
-        button {
-            cursor: pointer;
-        }
-        #output {
-            margin-top: 20px;
-            font-weight: bold;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>翻译页面</title>
 </head>
 <body>
-    <div class="container">
-        <h2>Translation Interface</h2>
-        <select id="sourceLang">
-            <option value="en">English</option>
-            <option value="zh">Chinese</option>
-            <!-- Add more language options here -->
-        </select>
-        <select id="targetLang">
-            <option value="en">English</option>
-            <option value="zh">Chinese</option>
-            <!-- Add more language options here -->
-        </select>
-        <br>
-        <input type="text" id="textInput" placeholder="Enter text to translate">
-        <!-- 在这里修改了 onclick 事件 -->
-        <button onclick="translateText()">Translate</button>
-        <div id="output"></div>
-    </div>
+  <h1>翻译页面</h1>
+  <label for="sourceLang">原语言：</label>
+  <select id="sourceLang">
+    <option value="en">英文</option>
+    <option value="zh">中文</option>
+    <!-- 其他语言选项 -->
+  </select>
+  <br>
+  <label for="targetLang">目标语言：</label>
+  <select id="targetLang">
+    <option value="en">英文</option>
+    <option value="zh">中文</option>
+    <!-- 其他语言选项 -->
+  </select>
+  <br>
+  <label for="textInput">要翻译的文本：</label>
+  <input type="text" id="textInput">
+  <br>
+  <button onclick="translate()">翻译</button>
+  <br>
+  <div id="translationResult"></div>
 
-    <script>
-        async function translateText() {
-            const sourceLang = document.getElementById('sourceLang').value;
-            const targetLang = document.getElementById('targetLang').value;
-            const text = document.getElementById('textInput').value;
-
-            try {
-                const response = await fetch(`https://translate.xzyl4303.workers.dev/?text=${encodeURIComponent(text)}&source_lang=${sourceLang}&target_lang=${targetLang}`);
-                const data = await response.json();
-
-                if (response.ok) {
-                    document.getElementById('output').innerText = data.response.translations[0].translatedText;
-                } else {
-                    document.getElementById('output').innerText = 'Translation failed.';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
+  <script>
+    async function translate() {
+      const sourceLang = document.getElementById('sourceLang').value;
+      const targetLang = document.getElementById('targetLang').value;
+      const text = document.getElementById('textInput').value;
+      
+      const url = `https://translate.xzyl4303.workers.dev/?source_lang=${sourceLang}&target_lang=${targetLang}&text=${encodeURIComponent(text)}`;
+      
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (response.ok) {
+          document.getElementById('translationResult').innerText = `翻译结果：${data.response.translated_text}`;
+        } else {
+          document.getElementById('translationResult').innerText = `翻译失败：${data.response.error}`;
         }
-    </script>
+      } catch (error) {
+        console.error('发生错误：', error);
+      }
+    }
+  </script>
 </body>
 </html>
